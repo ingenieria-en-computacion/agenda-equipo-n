@@ -1,106 +1,93 @@
 #include "agenda.h"
+#include <stdio.h>
+#include <string.h>
 
-/**
- * Esta función se encarga de iniciar el número de contactos a cero
- */
-void iniciar_agenda(Agenda *agenda){
+void leer_contacto(Contacto *c){
+    printf("Nombre: ");
+    scanf("%s", c->nombre);
 
+    printf("Apellido: ");
+    scanf("%s", c->apellido);
+
+    printf("Dia de nacimiento: ");
+    scanf("%d", &c->dia);
+
+    printf("Mes de nacimiento: ");
+    scanf("%d", &c->mes);
+
+    printf("Telefono: ");
+    scanf("%s", c->telefono);
+
+    printf("Tipo de telefono: ");
+    scanf("%s", c->tipo);
 }
 
-
-
-// Varible que lleva la cuenta de cuantos contactos hay en la agenda
-int num_contactos;
-
-/**
- * Esta función sirve para agregar un contacto nuevo en la agenda
- */
-void agregar_contacto(Agenda *agenda, Contacto c){
-
+void leer_contacto_archivo(Contacto *c, FILE *archivo){
+    if(fscanf(archivo, "%s %s %d %d %s %s",
+        c->nombre, c->apellido, &c->dia, &c->mes,
+        c->telefono, c->tipo) != 6)
+    {
+        c->nombre[0] = '\0';
+        return;
+    }
 }
 
-
-/**
- * Esta función sirve para buscar un contacto por nombre en la agenda y retorna la posición del contacto si exisite
- * En caso contrario retorna -1
- */
-int buscar_contacto(Agenda *agenda, char *nombre){
-
+void imprimir_contacto(Contacto c){
+    printf("\n--- CONTACTO ---\n");
+    printf("Nombre: %s %s\n", c.nombre, c.apellido);
+    printf("Nacimiento: %02d/%02d\n", c.dia, c.mes);
+    printf("Telefono: %s (%s)\n", c.telefono, c.tipo);
 }
 
+void buscar_contacto_nombre(Contacto *c, int n){
+    char buscado[20];
+    printf("Nombre a buscar: ");
+    scanf("%s", buscado);
 
-/**
- * Esta función  sirve para buscar un contacto por su número de telefono en la agenda
- */
-int buscar_contacto_x_telefono(Agenda *agenda, char telefono[]){
-
+    for(int i = 0; i < n; i++){
+        if(strcmp(c[i].nombre, buscado) == 0){
+            imprimir_contacto(c[i]);
+            return;
+        }
+    }
+    printf("No encontrado.\n");
 }
 
+void buscar_contacto_telefono(Contacto *c, int n){
+    char buscado[20];
+    printf("Telefono a buscar: ");
+    scanf("%s", buscado);
 
-/**
- * Esta función sirve para ordenar los contactos por nombres de forma ascendente
- */
-void ordenar_contactos(Agenda *a){
-    int i, j;
+    for(int i = 0; i < n; i++){
+        if(strcmp(c[i].telefono, buscado) == 0){
+            imprimir_contacto(c[i]);
+            return;
+        }
+    }
+    printf("No encontrado.\n");
+}
+
+void ordenar_contactos(Contacto *c, int n){
     Contacto temp;
-    for(i = 0; i < a->num_contactos; i++){
-        for(j=0; j < a->num_contactos-i-1; j++){
-            if(strcmp(a->contactos[j].nombre, a->contactos[j+1].nombre)>0){
-                temp = a->contactos[j];
-                a->contactos[j] = a->contactos[j+1];
-                a->contactos[j+1] = temp;
+    for(int i = 0; i < n - 1; i++){
+        for(int j = 0; j < n - i - 1; j++){
+            if(strcmp(c[j].apellido, c[j+1].apellido) > 0){
+                temp = c[j];
+                c[j] = c[j+1];
+                c[j+1] = temp;
             }
         }
     }
 }
 
-/**
- * Esta función sirve para ordenar los contactos por nombres de forma descendente
- */
-void ordenar_contactos_inv(Agenda *a){
-    int i, j;
-    Contacto temp;
-    for(i = 0; i < a->num_contactos; i++){
-        for(j=0; j < a->num_contactos-i-1; j++){
-            //Completar basandose en la función anterior
-        }
+int agregar_contacto(Contacto *agenda, int num){
+    if(num >= MAX_CONTACTOS){
+        printf("Agenda llena.\n");
+        return num;
     }
-}
 
-
-/**
- * Función auxiliar para imprimir un contacto
- */
-void mostrar_contacto(Contacto){
-
-}
-
-
-/**
- * Función auxiliar para leer un contacto
- */
-void leer_contacto(Contacto *c){
-
-}
-
-/**
- * Función que imprime todos los contactos de la agenda en pantalla
- */
-void imprimir_agenda(Agenda agenda){
-
-}
-
-/**
- * Función que sirve para cargar contactos escritos en un archivo a la agenda
- */
-void cargar_contactos(char *filename, Agenda *agenda){
-
-}
-
-
-/**
- * Función que sirve para guardar todos los contactos de la agenda en un archivo
- */
-void guardar_contactos(char *filename, Agenda agenda){
-
+    printf("\n--- Agregar contacto ---\n");
+    leer_contacto(&agenda[num]);
+    printf("Contacto agregado.\n");
+    return num + 1;
 }
