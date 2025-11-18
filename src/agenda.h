@@ -37,28 +37,3 @@ void cargar_contactos(char *filename);
 void guardar_contactos(char *filename);
 
 #endif // __AGENDA_H_
-
-#ifndef __AGENDA_H__
-#define __AGENDA_H__
-#include<stdio.h>
-#define MAX_CONTACTOS 10
-
-struct Contacto{
-    char nombre[15];
-    char apellido[15];
-    char oficio[20];
-    char telefono[11];
-    char tipo[11];
-    char correo[50];
-    char cumple[20];
-};
-
-typedef struct Contacto Contacto;
-
-void leer_contacto(Contacto *c); 
-void leer_contacto_archivo(Contacto *c, FILE *archivo); 
-void imprimir_contacto(Contacto c);
-void buscar_contacto(Contacto *c, int n);
-void ordenar_contactos(Contacto *c, int n);
-
-#endif //__AGENDA_H__ 
